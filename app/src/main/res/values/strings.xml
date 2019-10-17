@@ -5,4 +5,9 @@
     <string name="perm_not_granted">Permission not granted</string>
     <string name="settings">Settings</string>
     <string name="no_beacons">No beacons</string>
+    <string name="mac">MAC:</string>
+    <string name="rssi">RSSI:</string>
+    <string name="major">Major:</string>
+    <string name="minor">Minor:</string>
+    <string name="distance">Distance:</string>
 </resources>

@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -41,6 +40,17 @@ dependencies {
     //legacy
     def legacyVersion = "1.0.0"
     implementation "androidx.legacy:legacy-support-v4:$legacyVersion"
+    //lifecycle
+    def architectureComponentVersion = '2.1.0-rc01'
+    implementation "androidx.lifecycle:lifecycle-runtime:$architectureComponentVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$architectureComponentVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$architectureComponentVersion"
+    //rxKotlin
+    def rxKotlinVersion = '2.4.0'
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
+    //rxAndroid
+    def rxAndroidVersion = '2.1.1'
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     //junit
     def junitVersion = '4.12'
     implementation "junit:junit:$junitVersion"

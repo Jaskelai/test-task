@@ -1,6 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:orientation="vertical">
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_beacon_mac"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/mac"
+        app:layout_constraintBottom_toTopOf="@id/tv_beacon_rssi"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_beacon_mac_value"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/tv_beacon_mac"
+        app:layout_constraintTop_toTopOf="@id/tv_beacon_mac" />
+
+    <TextView
+        android:id="@+id/tv_beacon_rssi"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rssi"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_beacon_mac"
+        app:layout_constraintTop_toBottomOf="@id/tv_beacon_mac" />
+
+    <TextView
+        android:id="@+id/tv_beacon_rssi_value"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/tv_beacon_rssi"
+        app:layout_constraintTop_toTopOf="@id/tv_beacon_rssi" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gd_beacon_second_column"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.65" />
+
+    <TextView
+        android:id="@+id/tv_beacon_major"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/major"
+        app:layout_constraintStart_toStartOf="@id/gd_beacon_second_column"
+        app:layout_constraintBottom_toTopOf="@id/tv_beacon_minor"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_beacon_major_value"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/tv_beacon_major"
+        app:layout_constraintTop_toTopOf="@id/tv_beacon_major" />
+
+    <TextView
+        android:id="@+id/tv_beacon_minor"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/minor"
+        app:layout_constraintStart_toStartOf="@id/tv_beacon_major"
+        app:layout_constraintBottom_toTopOf="@id/tv_beacon_major"
+        app:layout_constraintTop_toBottomOf="@id/tv_beacon_distance" />
+
+    <TextView
+        android:id="@+id/tv_beacon_minor_value"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/tv_beacon_minor"
+        app:layout_constraintTop_toTopOf="@id/tv_beacon_minor" />
+
+    <TextView
+        android:id="@+id/tv_beacon_distance"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/distance"
+        app:layout_constraintStart_toStartOf="@id/tv_beacon_major"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_beacon_minor" />
+
+    <TextView
+        android:id="@+id/tv_distance_value"
+        style="@style/TextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/tv_beacon_distance"
+        app:layout_constraintTop_toTopOf="@id/tv_beacon_distance" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

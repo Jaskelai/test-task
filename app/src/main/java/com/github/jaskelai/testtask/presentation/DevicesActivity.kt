@@ -1,37 +1,54 @@
-package com.github.jaskelai.testtask
+package com.github.jaskelai.testtask.presentation
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import android.os.Bundle
 import android.os.RemoteException
 import android.provider.Settings
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.github.jaskelai.testtask.R
+import com.github.jaskelai.testtask.di.DiProvider
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import org.altbeacon.beacon.BeaconConsumer
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.RangeNotifier
 import org.altbeacon.beacon.Region
 
-class MainActivity : AppCompatActivity(), BeaconConsumer {
+class DevicesActivity : AppCompatActivity(), BeaconConsumer {
 
     companion object {
         private const val CODE_PERMISSION_REQUEST_FINE_LOCATION = 1
         private const val BEACON_MANAGER_NAME = "random_name"
     }
 
+    private lateinit var devicesAdapter: BleDevicesAdapter
     private lateinit var beaconManager: BeaconManager
+    private lateinit var devicesViewModel: DevicesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        devicesViewModel = ViewModelProviders.of(
+            this,
+            DiProvider.devicesViewModelFactory
+        ).get(DevicesViewModel::class.java)
+
+        beaconManager = BeaconManager.getInstanceForApplication(this)
+        beaconManager.bind(this)
+
+        setupRecyclerView()
+        subscribeToLiveData()
         dealWithPermissions()
     }
 
@@ -48,7 +65,7 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
         when (requestCode) {
             CODE_PERMISSION_REQUEST_FINE_LOCATION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    fetchLocations()
+                    fetchNearDevices()
                 } else {
                     showPermsOnSetting()
                 }
@@ -59,9 +76,7 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
     override fun onBeaconServiceConnect() {
         val notifier = RangeNotifier { beacons, region ->
             if (beacons.isNotEmpty()) {
-
-            } else {
-                Toast.makeText(this, R.string.no_beacons, Toast.LENGTH_SHORT).show()
+                devicesViewModel.addBeacons(beacons)
             }
         }
 
@@ -75,13 +90,22 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
         }
     }
 
+    private fun setupRecyclerView() {
+        devicesAdapter = BleDevicesAdapter()
+
+        rv_main.apply {
+            adapter = devicesAdapter
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }
+    }
+
     private fun dealWithPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermissionWithRationale()
         } else {
-            fetchLocations()
+            fetchNearDevices()
         }
     }
 
@@ -91,7 +115,10 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
         ) {
-            Snackbar.make(layout_main, R.string.location_perm_reason, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(
+                layout_main,
+                R.string.location_perm_reason, Snackbar.LENGTH_INDEFINITE
+            )
                 .setAction(getString(R.string.grant)) { requestPerms() }
                 .show()
         } else {
@@ -126,9 +153,13 @@ class MainActivity : AppCompatActivity(), BeaconConsumer {
         startActivity(appSettingsIntent)
     }
 
-    private fun fetchLocations() {
-        beaconManager = BeaconManager.getInstanceForApplication(this)
-        beaconManager.bind(this)
+    private fun fetchNearDevices() {
+        devicesViewModel.fetchBleDevices()
     }
 
+    private fun subscribeToLiveData() {
+        devicesViewModel.devicesLiveData.observe(this, Observer {
+            devicesAdapter.submitList(it.values.toList())
+        })
+    }
 }
