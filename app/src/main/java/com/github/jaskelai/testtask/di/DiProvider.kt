@@ -12,9 +12,9 @@ object DiProvider {
 
     val bluetoothLeScanner: BluetoothLeScanner? = bluetoothAdapter?.bluetoothLeScanner
 
-    val BLE_DEVICES_REPOSITORY: BleDevicesRepository = BleDevicesRepository(bluetoothLeScanner)
+    val bleDevicesRepository: BleDevicesRepository = BleDevicesRepository(bluetoothLeScanner)
 
-    val devicesInteractor: DevicesInteractor = DevicesInteractor(BLE_DEVICES_REPOSITORY)
+    val devicesInteractor: DevicesInteractor = DevicesInteractor(bleDevicesRepository)
 
     val devicesViewModelFactory: DevicesViewModelFactory = DevicesViewModelFactory(devicesInteractor)
 }

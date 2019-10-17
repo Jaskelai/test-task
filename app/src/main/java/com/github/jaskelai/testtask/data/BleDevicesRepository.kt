@@ -7,9 +7,7 @@ import com.github.jaskelai.testtask.domain.BleDevice
 import com.github.jaskelai.testtask.utils.mapScanResultToBleDevice
 import io.reactivex.Observable
 
-class BleDevicesRepository(
-    private val bluetoothLeScanner: BluetoothLeScanner?
-) {
+class BleDevicesRepository(private val bluetoothLeScanner: BluetoothLeScanner?) {
 
     fun observeBleDevices(): Observable<BleDevice> {
         return Observable.create { emitter ->
